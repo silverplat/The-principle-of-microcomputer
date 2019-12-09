@@ -1,16 +1,16 @@
-;¼ÆÊý
+;è®¡æ•°
 DAT SEGMENT
     LEDTABLE 	DB 3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH,77H,7CH,39H,5EH,79H,71H,00H
-    DNUM    DB 10H,10H,10H,10H  ;LEDÏÔÊ¾ÄÚÈÝ 
-    SNUM    DB 00H,00H ;LEDÓ¦ÏÔÊ¾µÄÊý×Ö
-    ANUM    DB 10H  ;¼üÅÌ¶ÁÈë×Ö·û
-    TIMENUM DB 00H,00H  ;¶ÁÈë·ÖÖÓÊý,Á½Î»BCDÂë
-    TIMERET DW 0000H,0000H,0000H,0000H ;´æ·Å·ÏÆúµÄtime up·µ»ØµØÖ·
-    FLAG    DB 00H;ÊäÈëÍê±êÖ¾
+    DNUM    DB 10H,10H,10H,10H  ;LEDæ˜¾ç¤ºå†…å®¹ 
+    SNUM    DB 00H,00H ;LEDåº”æ˜¾ç¤ºçš„æ•°å­—
+    ANUM    DB 10H  ;é”®ç›˜è¯»å…¥å­—ç¬¦
+    TIMENUM DB 00H,00H  ;è¯»å…¥åˆ†é’Ÿæ•°,ä¸¤ä½BCDç 
+    TIMERET DW 0000H,0000H,0000H,0000H ;å­˜æ”¾åºŸå¼ƒçš„time upè¿”å›žåœ°å€
+    FLAG    DB 00H;è¾“å…¥å®Œæ ‡å¿—
     
-    TONUM   EQU 4;LED¸öÊý 
-    MAXR    EQU 3;×î´ó¶Á¼üÅÌ´ÎÊý
-    LEFTLED EQU 11111110B;×î×óLEDµÄÎ»Ñ¡Âë 
+    TONUM   EQU 4;LEDä¸ªæ•° 
+    MAXR    EQU 3;æœ€å¤§è¯»é”®ç›˜æ¬¡æ•°
+    LEFTLED EQU 11111110B;æœ€å·¦LEDçš„ä½é€‰ç  
     
     PA8255  EQU 0600H
     PB8255  EQU 0602H
@@ -25,27 +25,27 @@ DAT SEGMENT
     A_8259  EQU 0020H
     B_8259  EQU 0021H
     ICW2_8259 EQU 08H
-    MIR6_8259 EQU 38H;MIR6½Ó¼ÆÊ±Æ÷0¿ÚÃ¿1Ãë¼õÉÙÒ»´ÎÊýÖµ
-    MIR7_8259 EQU 3CH;MIR7½Ó¼ÆÊ±Æ÷1¿ÚÃ¿0.25ÃëË¢ÐÂÒ»´ÎLED
+    MIR6_8259 EQU 38H;MIR6æŽ¥è®¡æ—¶å™¨0å£æ¯1ç§’å‡å°‘ä¸€æ¬¡æ•°å€¼
+    MIR7_8259 EQU 3CH;MIR7æŽ¥è®¡æ—¶å™¨1å£æ¯0.25ç§’åˆ·æ–°ä¸€æ¬¡LED
     
-    MINUTE  EQU  4800H;1ºÁÃëÖÓ¼ÆÊýÖµ
-    RETIME  EQU  4800H;LEDË¢ÐÂÊ±¼ä1ºÁÃë
+    MINUTE  EQU  4800H;1æ¯«ç§’é’Ÿè®¡æ•°å€¼
+    RETIME  EQU  4800H;LEDåˆ·æ–°æ—¶é—´1æ¯«ç§’
 DAT ENDS
 COD SEGMENT
         ASSUME CS:COD,DS:DAT
 START:  MOV AX,DAT
         MOV DS,AX  
         
-        CALL INIT8255;³õÊ¼»¯8255
-        CALL INIT8259;³õÊ¼»¯8259
-        CALL INITTIME;³õÊ¼»¯¼ÆÊ±Æ÷
-        ;³õÊ¼»¯×´Ì¬
-S0:     CALL PAUSETIME;Í£Ö¹¼ÆÊý
-        CALL INITSTATES;³õÊ¼»¯LED×´Ì¬
+        CALL INIT8255;åˆå§‹åŒ–8255
+        CALL INIT8259;åˆå§‹åŒ–8259
+        CALL INITTIME;åˆå§‹åŒ–è®¡æ—¶å™¨
+        ;åˆå§‹åŒ–çŠ¶æ€
+S0:     CALL PAUSETIME;åœæ­¢è®¡æ•°
+        CALL INITSTATES;åˆå§‹åŒ–LEDçŠ¶æ€
         
         MOV FLAG,00H
-        ;³õÖµ×´Ì¬
-        MOV  CX,2;ÊäÈëÁ½Î»³õÖµ
+        ;åˆå€¼çŠ¶æ€
+        MOV  CX,2;è¾“å…¥ä¸¤ä½åˆå€¼
 S1:     ;CALL DELAYS
         CALL DISPLAYER
         MOV  ANUM,10H
@@ -62,10 +62,10 @@ S1:     ;CALL DELAYS
         JMP S2
 SZ11:   JMP NEAR PTR SZ  
 
-S2:     ;µÈ´ý×´Ì¬
+S2:     ;ç­‰å¾…çŠ¶æ€
         ;CALL DELAYS 
         CALL DISPLAYER
-        ;¶ÁÈë
+        ;è¯»å…¥
         MOV  ANUM,10H
         CALL INPUT
         MOV  AL,ANUM
@@ -74,7 +74,7 @@ S2:     ;µÈ´ý×´Ì¬
         CMP  AL,0CH
         JZ   SZ
         JMP  S2
-S2_1:   CALL INPUT_TO_NUM;×ª»¯ÎªÊý×Ö
+S2_1:   CALL INPUT_TO_NUM;è½¬åŒ–ä¸ºæ•°å­—
 		MOV DL,TIMENUM
 		MOV CL,4
         ROL DL,CL
@@ -84,13 +84,13 @@ S2_1:   CALL INPUT_TO_NUM;×ª»¯ÎªÊý×Ö
         OR  DL,DH
         CMP DL,00H
         JZ S0
-		CALL STATESTO0;ÖÃ³õÖµ 
-        CALL STIME;¿ªÊ¼¼ÆÊ± 
+		CALL STATESTO0;ç½®åˆå€¼ 
+        CALL STIME;å¼€å§‹è®¡æ—¶ 
         
-        ;¼ÆÊ±²¢µÈ´ýÊäÈë×´Ì¬
+        ;è®¡æ—¶å¹¶ç­‰å¾…è¾“å…¥çŠ¶æ€
 S3:     ;CALL DELAYS
         CALL DISPLAYER
-        MOV  ANUM,10H ;¶ÁÈë
+        MOV  ANUM,10H ;è¯»å…¥
         CALL INPUT
         MOV  AL,ANUM
         CMP  AL,0AH
@@ -101,11 +101,11 @@ S3:     ;CALL DELAYS
         JZ   SZ
         JMP  S3
 SS0:    JMP FAR PTR S0        
-        ;ÔÝÍ£×´Ì¬
-S4:     CALL PAUSETIME;ÔÝÍ£¼ÆÊ± 
+        ;æš‚åœçŠ¶æ€
+S4:     CALL PAUSETIME;æš‚åœè®¡æ—¶ 
 S5:     ;CALL DELAYS
         CALL DISPLAYER
-        ;¶ÁÈë
+        ;è¯»å…¥
         MOV  ANUM,10H 
         CALL INPUT
         MOV  AL,ANUM
@@ -116,20 +116,20 @@ S5:     ;CALL DELAYS
         CMP  AL,0CH
         JZ   SZ
         JMP  S5
-S6:     CALL STIME;ÖØÐÂ¿ªÊ¼¼ÆÊ±
+S6:     CALL STIME;é‡æ–°å¼€å§‹è®¡æ—¶
         JMP  S3
         
 S5_0:   JMP NEAR PTR S0
           
-        ;Í£Ö¹×´Ì¬
-SZ:     ;CALL PAUSETIME;³õÊ¼»¯¼ÆÊ±Æ÷      
-        ;CALL INITSTATES;³õÊ¼»¯LED×´Ì¬
+        ;åœæ­¢çŠ¶æ€
+SZ:     ;CALL PAUSETIME;åˆå§‹åŒ–è®¡æ—¶å™¨      
+        ;CALL INITSTATES;åˆå§‹åŒ–LEDçŠ¶æ€
         CALL EXIT
 EXIT:   MOV AH,4CH
         INT 21H
-        ;Ö÷³ÌÐò½áÊø
+        ;ä¸»ç¨‹åºç»“æŸ
 
-INPUT_TO_NUM PROC NEAR;ÊäÈë×ª»¯ÎªÊý×Ö
+INPUT_TO_NUM PROC NEAR;è¾“å…¥è½¬åŒ–ä¸ºæ•°å­—
 		PUSH BX
         PUSH CX
         PUSH DX
@@ -150,7 +150,7 @@ ITN1:   MOV TIMENUM,DL
 INPUT_TO_NUM ENDP  
 
       
-FLASH_3_TIMES PROC NEAR;ÉÁË¸Èý´Î
+FLASH_3_TIMES PROC NEAR;é—ªçƒä¸‰æ¬¡
         CLI 
         PUSH CX
         PUSH DX
@@ -188,7 +188,7 @@ P2:		CALL DISPLAYS
         RET
 FLASH_3_TIMES ENDP        
            
-STATESTO0 PROC NEAR;LEDÖÃ³õÖµ
+STATESTO0 PROC NEAR;LEDç½®åˆå€¼
         PUSH AX
         PUSH BX 
         
@@ -205,7 +205,7 @@ STATESTO0 PROC NEAR;LEDÖÃ³õÖµ
         RET
 STATESTO0 ENDP
 
-INITSTATE0 PROC NEAR;LEDÖÃÈ«0
+INITSTATE0 PROC NEAR;LEDç½®å…¨0
         PUSH BX 
         
         LEA BX,DNUM
@@ -218,7 +218,7 @@ INITSTATE0 PROC NEAR;LEDÖÃÈ«0
         RET
 INITSTATE0 ENDP
 
-INITSTATES PROC NEAR;³õÊ¼»¯LED×´Ì¬
+INITSTATES PROC NEAR;åˆå§‹åŒ–LEDçŠ¶æ€
         PUSH BX 
         
         LEA BX,DNUM
@@ -235,7 +235,7 @@ INIT8255 PROC NEAR
         PUSH AX
         PUSH DX
         
-        ;A¿ÚÊä³ö£¬B¿ÚÊä³ö£¬C¿Ú¸ß4Î»Êä³ö(¼ÆÊýÆ÷GATE)£¬C¿ÚµÍ4Î»ÊäÈë
+        ;Aå£è¾“å‡ºï¼ŒBå£è¾“å‡ºï¼ŒCå£é«˜4ä½è¾“å‡º(è®¡æ•°å™¨GATE)ï¼ŒCå£ä½Ž4ä½è¾“å…¥
         MOV DX,CON8255 ;INIT 8255
         MOV AL,10000001B
         OUT DX,AL
@@ -245,7 +245,7 @@ INIT8255 PROC NEAR
         RET
 INIT8255 ENDP
 
-INIT8259 PROC NEAR;³õÊ¼»¯8259 
+INIT8259 PROC NEAR;åˆå§‹åŒ–8259 
         PUSH AX
         PUSH DX
         
@@ -290,12 +290,12 @@ INIT8259 PROC NEAR;³õÊ¼»¯8259
         RET
 INIT8259 ENDP
 
-INITTIME PROC NEAR;³õÊ¼»¯¼ÆÊ±Æ÷
+INITTIME PROC NEAR;åˆå§‹åŒ–è®¡æ—¶å™¨
         PUSH AX
         PUSH DX
         
         MOV DX,CON_8254;8254 CONTROL
-        MOV AL,00110110B;¼ÆÊýÆ÷0·½Ê½3³õÖµMINUTE¶þ½øÖÆ
+        MOV AL,00110110B;è®¡æ•°å™¨0æ–¹å¼3åˆå€¼MINUTEäºŒè¿›åˆ¶
         OUT DX,AL
         
         MOV DX,OUT0_8254;8254 COUNTER0
@@ -305,7 +305,7 @@ INITTIME PROC NEAR;³õÊ¼»¯¼ÆÊ±Æ÷
         OUT DX,AL
         
         MOV DX,CON_8254;8254 CONTROL
-        MOV AL,01110110B;¼ÆÊýÆ÷1·½Ê½3³õÖµRETIME¶þ½øÖÆ
+        MOV AL,01110110B;è®¡æ•°å™¨1æ–¹å¼3åˆå€¼RETIMEäºŒè¿›åˆ¶
         OUT DX,AL
         
         MOV DX,OUT1_8254;8254 COUNTER1
@@ -319,7 +319,7 @@ INITTIME PROC NEAR;³õÊ¼»¯¼ÆÊ±Æ÷
         RET
 INITTIME ENDP
 
-STIME PROC NEAR;¿ªÊ¼¼ÆÊ±
+STIME PROC NEAR;å¼€å§‹è®¡æ—¶
         PUSH AX
         PUSH DX
         
@@ -329,7 +329,7 @@ STIME PROC NEAR;¿ªÊ¼¼ÆÊ±
         OUT DX,AL
         STI
         
-        MOV DX,CON8255 ;C¿Ú×î¸ßÎ»ÖÃ1
+        MOV DX,CON8255 ;Cå£æœ€é«˜ä½ç½®1
         MOV AL,00001111B
         OUT DX,AL
         
@@ -338,7 +338,7 @@ STIME PROC NEAR;¿ªÊ¼¼ÆÊ±
         RET
 STIME ENDP 
 
-PAUSETIME PROC NEAR;ÔÝÍ£¼ÆÊ± 
+PAUSETIME PROC NEAR;æš‚åœè®¡æ—¶ 
         PUSH AX
         PUSH DX
         
@@ -347,7 +347,7 @@ PAUSETIME PROC NEAR;ÔÝÍ£¼ÆÊ±
         MOV AL,11111111B
         OUT DX,AL
         STI
-        MOV DX,CON8255 ;C¿Ú×î¸ßÎ»ÖÃ0
+        MOV DX,CON8255 ;Cå£æœ€é«˜ä½ç½®0
         MOV AL,00001110B
         OUT DX,AL
         
@@ -356,7 +356,7 @@ PAUSETIME PROC NEAR;ÔÝÍ£¼ÆÊ±
         RET
 PAUSETIME ENDP
 
-SHIFTNUM PROC NEAR;DNUMÖÐÊý×ÖÏò×óÒÆÒ»,ANUMÖÐÊý×Ö¼ÓÈë×îÓÒ±ßÒ» 
+SHIFTNUM PROC NEAR;DNUMä¸­æ•°å­—å‘å·¦ç§»ä¸€,ANUMä¸­æ•°å­—åŠ å…¥æœ€å³è¾¹ä¸€ 
         PUSH AX
         PUSH BX
         PUSH SI
@@ -380,7 +380,7 @@ SH1:    MOV AL,SI[BX]
         RET
 SHIFTNUM ENDP
        
-DISPLAYS PROC NEAR ;ÏÔÊ¾DNUMÖÐµÄ4¸öÊý×ÖÒ»´Î
+DISPLAYS PROC NEAR ;æ˜¾ç¤ºDNUMä¸­çš„4ä¸ªæ•°å­—ä¸€æ¬¡
         PUSH AX
         PUSH BX
         PUSH CX
@@ -390,34 +390,34 @@ DISPLAYS PROC NEAR ;ÏÔÊ¾DNUMÖÐµÄ4¸öÊý×ÖÒ»´Î
         LEA SI,DNUM    ;INIT DATA LEDTABLE
         LEA BX,LEDTABLE
         
-D0:     MOV AH,LEFTLED;×î×ó
+D0:     MOV AH,LEFTLED;æœ€å·¦
         LEA SI,DNUM
         
 D1:     MOV CX,TONUM 
 
-D2:     MOV AL,10H;ËÍÇå¿Õ¶ÎÂë
+D2:     MOV AL,10H;é€æ¸…ç©ºæ®µç 
         XLAT
         MOV DX,PB8255
         OUT DX,AL
         
-		MOV AL,AH       ;ËÍÎ»Ñ¡
+		MOV AL,AH       ;é€ä½é€‰
         MOV DX,PA8255
         OUT DX,AL 
         
-        MOV AL,[SI]     ;ËÍ¶ÎÂë
+        MOV AL,[SI]     ;é€æ®µç 
         XLAT
         MOV DX,PB8255
         OUT DX,AL
         
         CALL DELAY
         
-        ROL AH,1  ;Î»Ñ¡Âë×óÒÆ,Ñ¡ÖÐÊýÂë¹ÜÓÒÒÆ
+        ROL AH,1  ;ä½é€‰ç å·¦ç§»,é€‰ä¸­æ•°ç ç®¡å³ç§»
         INC SI
         
         LOOP D2
         
-        ;Çå×î¸ßÒ»ÊýÂë¹Ü
-        MOV AL,10H;ËÍÇå¿Õ¶ÎÂë
+        ;æ¸…æœ€é«˜ä¸€æ•°ç ç®¡
+        MOV AL,10H;é€æ¸…ç©ºæ®µç 
         XLAT
         MOV DX,PB8255
         OUT DX,AL                   
@@ -432,16 +432,16 @@ D2:     MOV AL,10H;ËÍÇå¿Õ¶ÎÂë
 DISPLAYS ENDP
               
               
-INPUT PROC NEAR;¶Á¼üÅÌÒ»¸öÊýµ½ANUM,Á¬ÐøMAXR´ÎÎ´¶Áµ½Êý»á·µ»Ø  
+INPUT PROC NEAR;è¯»é”®ç›˜ä¸€ä¸ªæ•°åˆ°ANUM,è¿žç»­MAXRæ¬¡æœªè¯»åˆ°æ•°ä¼šè¿”å›ž  
         PUSH AX
         PUSH BX
         PUSH CX
         PUSH DX
         
-        MOV BX,MAXR;×î´ó¶ÁÈ¡¼üÅÌ´ÎÊý
+        MOV BX,MAXR;æœ€å¤§è¯»å–é”®ç›˜æ¬¡æ•°
         
 I1:     DEC BX
-        JZ  I5 ;³¬³ö¶ÁÈ¡´ÎÊý
+        JZ  I5 ;è¶…å‡ºè¯»å–æ¬¡æ•°
         
         MOV DX,PA8255
         MOV AL,00H
@@ -452,7 +452,7 @@ I1:     DEC BX
         CMP AL,0FH
         JZ  I1
         
-        ;CALL DELAYS;Ïû¶¶
+        ;CALL DELAYS;æ¶ˆæŠ–
         CALL DISPLAYER
         
         MOV DX,PA8255
@@ -464,8 +464,8 @@ I1:     DEC BX
         CMP AL,0FH
         JZ  I1
         
-        MOV CL,0;´æ¼üºÅ
-        MOV AH,11111110B;ÁÐÉ¨Ãè
+        MOV CL,0;å­˜é”®å·
+        MOV AH,11111110B;åˆ—æ‰«æ
 I2:     MOV AL,AH
         MOV DX,PA8255
         OUT DX,AL
@@ -473,27 +473,27 @@ I2:     MOV AL,AH
         IN  AL,DX
         AND AL,0FH
         CMP AL,0FH
-        JNZ I3;ÕÒµ½
-        ROL AH,1;É¨ÃèÏÂÒ»ÁÐ
-        INC CL;¼üºÅ¼ÓÒ»ÁÐ
+        JNZ I3;æ‰¾åˆ°
+        ROL AH,1;æ‰«æä¸‹ä¸€åˆ—
+        INC CL;é”®å·åŠ ä¸€åˆ—
         CMP AH,11101111B
         JNZ I2
-        JMP I1;Î´ÕÒµ½Ìø»ØI1
+        JMP I1;æœªæ‰¾åˆ°è·³å›žI1
 
-I3:     CMP AL,00001110B;ÔÚµÚ0ÐÐ
+I3:     CMP AL,00001110B;åœ¨ç¬¬0è¡Œ
         JZ I4
-        ADD CL,4;¼üºÅ¼ÓÒ»ÐÐ 
-        CMP AL,00001101B;ÔÚµÚ1ÐÐ
+        ADD CL,4;é”®å·åŠ ä¸€è¡Œ 
+        CMP AL,00001101B;åœ¨ç¬¬1è¡Œ
         JZ I4
-        ADD CL,4;¼üºÅ¼ÓÒ»ÐÐ
-        CMP AL,00001011B;ÔÚµÚ2ÐÐ
+        ADD CL,4;é”®å·åŠ ä¸€è¡Œ
+        CMP AL,00001011B;åœ¨ç¬¬2è¡Œ
         JZ I4
-        ADD CL,4;¼üºÅ¼ÓÒ»ÐÐ
-        CMP AL,00000111B;ÔÚµÚ3ÐÐ
+        ADD CL,4;é”®å·åŠ ä¸€è¡Œ
+        CMP AL,00000111B;åœ¨ç¬¬3è¡Œ
         JZ I4
         JMP I1
         
-I4:     MOV ANUM,CL;´æ½á¹û
+I4:     MOV ANUM,CL;å­˜ç»“æžœ
 
         CALL DISPLAYS
         MOV DX,PA8255
@@ -535,7 +535,7 @@ DELAY PROC NEAR
         RET
 DELAY ENDP 
 
-INTP6 PROC FAR;MIR6½Ó¼ÆÊ±Æ÷0¿ÚÃ¿1Ãë¼õÉÙÒ»´ÎÊýÖµ,È«Ç¶Ì×·½Ê½IR6ÓÅÏÈ¼¶¸ßÓÚIR7 
+INTP6 PROC FAR;MIR6æŽ¥è®¡æ—¶å™¨0å£æ¯1ç§’å‡å°‘ä¸€æ¬¡æ•°å€¼,å…¨åµŒå¥—æ–¹å¼IR6ä¼˜å…ˆçº§é«˜äºŽIR7 
         STI
         PUSH AX
         
@@ -554,7 +554,7 @@ TIMEUP: CALL FLASH_3_TIMES
         POP AX
         POP WORD PTR TIMERET
         POP WORD PTR TIMERET+2
-        ;ÖØÐÂ¿ªÊ¼
+        ;é‡æ–°å¼€å§‹
         PUSH COD
         PUSH OFFSET S0
         IRET
@@ -563,7 +563,7 @@ TZ:     POP AX
         IRET
 INTP6 ENDP
 
-INTP7 PROC FAR;MIR7½Ó¼ÆÊ±Æ÷1¿ÚÃ¿0.001ÃëË¢ÐÂÒ»´ÎLED
+INTP7 PROC FAR;MIR7æŽ¥è®¡æ—¶å™¨1å£æ¯0.001ç§’åˆ·æ–°ä¸€æ¬¡LED
         STI
         ;CALL DISPLAYS
         
@@ -581,7 +581,7 @@ DDD1:
         RET
 DISPLAYER ENDP
 
-STOD PROC NEAR ;¼ÆËãÓÃÑ¹ËõBCDÂë×ª»¯Îª·ÇÑ¹ËõÏÔÊ¾ÓÃBCDÊý×Ö
+STOD PROC NEAR ;è®¡ç®—ç”¨åŽ‹ç¼©BCDç è½¬åŒ–ä¸ºéžåŽ‹ç¼©æ˜¾ç¤ºç”¨BCDæ•°å­—
         PUSH AX
         PUSH CX
         PUSH SI
@@ -603,7 +603,7 @@ STOD0:  MOV AL,SI[SNUM]
         CMP DI,TONUM-1
         JNA STOD0
         
-;        MOV DI,0 ;½«Ç°¼¸Î»ÎªÁãµÄÊý×Ö×ª»¯Îª²»ÏÔÊ¾µÄ×Ö·û10H
+;        MOV DI,0 ;å°†å‰å‡ ä½ä¸ºé›¶çš„æ•°å­—è½¬åŒ–ä¸ºä¸æ˜¾ç¤ºçš„å­—ç¬¦10H
 ;STOD2:  CMP DI[DNUM],00H
 ;        JNZ STOD1
 ;        CMP DI,TONUM-1
@@ -619,7 +619,7 @@ STOD1:
         RET
 STOD ENDP
 
-DTOS PROC NEAR ;·ÇÑ¹ËõÏÔÊ¾ÓÃBCDÊý×Ö×ª»¯Îª¼ÆËãÓÃÑ¹ËõBCDÂë
+DTOS PROC NEAR ;éžåŽ‹ç¼©æ˜¾ç¤ºç”¨BCDæ•°å­—è½¬åŒ–ä¸ºè®¡ç®—ç”¨åŽ‹ç¼©BCDç 
         PUSH AX
         PUSH CX
         PUSH SI
@@ -648,7 +648,7 @@ DTOS0:  MOV AL,DI[DNUM]
         RET
 DTOS ENDP
 
-SUBBCD PROC NEAR ;ÃëÎ»60½øÖÆÑ¹ËõBCDÂë¼õ·¨
+SUBBCD PROC NEAR ;ç§’ä½60è¿›åˆ¶åŽ‹ç¼©BCDç å‡æ³•
         PUSH AX
         
         MOV AL,1[SNUM]
@@ -657,10 +657,10 @@ SUBBCD PROC NEAR ;ÃëÎ»60½øÖÆÑ¹ËõBCDÂë¼õ·¨
         CMP AL,99H
         JNZ SUBBCDNO 
         MOV AL,59H
-        STC ;ÓÐ½èÎ»
+        STC ;æœ‰å€Ÿä½
         JMP SUBBCDNEXT
 SUBBCDNO:
-        CLC ;ÎÞ½èÎ»
+        CLC ;æ— å€Ÿä½
 SUBBCDNEXT:
         MOV 1[SNUM],AL
         MOV AL,0[SNUM]
