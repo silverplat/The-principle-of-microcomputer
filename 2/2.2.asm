@@ -1,4 +1,4 @@
-;按不规则字写
+;鎸変笉瑙勫垯瀛楀啓
 CODE SEGMENT
 	ASSUME CS:CODE
 START:
