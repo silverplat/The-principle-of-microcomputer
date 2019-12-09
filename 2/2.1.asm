@@ -1,4 +1,4 @@
-;��������д
+;°´¹æÔò×ÖÐ´
 CODE SEGMENT
 	ASSUME CS:CODE
 START:
