@@ -1,4 +1,4 @@
-;°´×Ö½ÚÐ´
+;按字节写
 CODE SEGMENT
 	ASSUME CS:CODE
 START:
